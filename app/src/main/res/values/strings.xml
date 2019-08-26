@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidNotesProfessional</string>
+    <string name="bold_font">bold.ttf</string>
 </resources>

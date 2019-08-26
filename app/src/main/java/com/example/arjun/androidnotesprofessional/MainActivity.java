@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView1, textView2;
     String firstWord, lastWord;
     Spannable spannable;
+    CustomTextView customTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textView1 = findViewById(R.id.t1);
         textView2 = findViewById(R.id.t2);
-
+        customTextView=findViewById(R.id.t3);
         firstWord = "Spannable";
         lastWord = "Color";
 
