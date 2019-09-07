@@ -11,22 +11,21 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    MyAdapter mMyAdapter;
+    private MyAdapterWithBinding myAdapterWithBinding;
     private List<Movie> movieList = new ArrayList<>();
-    PreLoadingLinearLayoutManager preLoadingLinearLayoutManager;
-    Movie movie;
+    private LinearLayoutManager mLinearLayoutManager;
+    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-        mMyAdapter = new MyAdapter(movieList);
-        preLoadingLinearLayoutManager = new PreLoadingLinearLayoutManager(getApplicationContext());
-        //mLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(preLoadingLinearLayoutManager);
-        mRecyclerView.setAdapter(mMyAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        myAdapterWithBinding = new MyAdapterWithBinding(movieList);
+        mLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(myAdapterWithBinding);
 
         prepareMovieData();
 
@@ -561,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
         movie = new Movie("Guardians of the Galaxy", "Science Fiction & Fantasy", "2014");
         movieList.add(movie);
 
-        mMyAdapter.notifyDataSetChanged();
+        myAdapterWithBinding.notifyDataSetChanged();
 
 
     }
