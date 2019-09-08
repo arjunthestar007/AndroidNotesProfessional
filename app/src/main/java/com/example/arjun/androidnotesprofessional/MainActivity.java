@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,26 @@ public class MainActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mMyAdapter);
+        mMyAdapter.setmClickInterface(new MyAdapter.ClickInterface() {
+            @Override
+            public void clickEventOne(Object obj) {
+                Movie movie = (Movie) obj;
+                Toast.makeText(MainActivity.this, "" + movie.getTitle(), Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void clickEventTwo(Object obj1, Object obj2) {
+                Movie movie = (Movie) obj1;
+                Toast.makeText(MainActivity.this, "" + movie.getYear(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
         prepareMovieData();
 
     }
 
     private void prepareMovieData() {
-         movie = new Movie("Mad Max: Fury Road", "Action & Adventure", "2015");
+        movie = new Movie("Mad Max: Fury Road", "Action & Adventure", "2015");
         objectList.add(movie);
 
         movie = new Movie("Inside Out", "Animation, Kids & Family", "2015");

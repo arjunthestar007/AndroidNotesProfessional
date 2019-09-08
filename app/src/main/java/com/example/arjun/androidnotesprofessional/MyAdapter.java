@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.Myholder> {
     List<Movie> mMoviesList;
-    ClickInterface clickInterface;
+    ClickInterface mClickInterface;
 
     public interface ClickInterface {
         void clickEventOne(Object obj);
@@ -21,6 +21,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.Myholder> {
 
     public MyAdapter(List<Movie> mMoviesList) {
         this.mMoviesList = mMoviesList;
+    }
+
+    public void setmClickInterface(ClickInterface mClickInterface) {
+        this.mClickInterface = mClickInterface;
     }
 
 
@@ -33,11 +37,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.Myholder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Myholder myholder, int i) {
-        Movie movie = mMoviesList.get(i);
+    public void onBindViewHolder(@NonNull Myholder myholder, int position) {
+        Movie movie = mMoviesList.get(position);
         myholder.title.setText(movie.getTitle());
         myholder.genre.setText(movie.getGenre());
         myholder.year.setText(movie.getYear());
+
+        //make all even positions not clickable
+        myholder.firstClickListener.setmClickable(position % 2 == 0);
+        myholder.firstClickListener.setmPosition(position);
+        myholder.secondClickListener.setPosition(position);
 
 
     }
@@ -47,15 +56,57 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.Myholder> {
         return mMoviesList.size();
     }
 
+    public class FirstClickListener implements View.OnClickListener {
+        private int mPosition;
+        private boolean mClickable;
+
+        public void setmPosition(int mPosition) {
+            this.mPosition = mPosition;
+        }
+
+        public void setmClickable(boolean mClickable) {
+            this.mClickable = mClickable;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mClickable) {
+                mClickInterface.clickEventOne(mMoviesList.get(mPosition));
+            }
+
+        }
+    }
+
+    private class SecondClickListener implements View.OnClickListener {
+        private int mPosition;
+
+        void setPosition(int position) {
+            mPosition = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mClickInterface.clickEventTwo(mMoviesList.get(mPosition), v);
+        }
+    }
+
     public class Myholder extends RecyclerView.ViewHolder {
 
         public TextView title, year, genre;
+        FirstClickListener firstClickListener;
+        SecondClickListener secondClickListener;
 
         public Myholder(@NonNull View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             genre = (TextView) view.findViewById(R.id.genre);
             year = (TextView) view.findViewById(R.id.year);
+
+            firstClickListener = new FirstClickListener();
+            title.setOnClickListener(firstClickListener);
+
+            secondClickListener=new SecondClickListener();
+            year.setOnClickListener(secondClickListener);
         }
     }
 }
