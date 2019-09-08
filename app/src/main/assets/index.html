@@ -3,7 +3,13 @@
     <script type="text/javascript">
 
    Android.jsCallback();
+
    Android.jsCallbackTwo('hello test');
+
+    function showAndroidToast(toast) {
+        Android.showToast(toast);
+    }
+
     console.log('test message');
 
 
@@ -36,5 +42,7 @@
     such as handle page navigation and bind JavaScript from your web page to client-side code in
     your Android app.
 </p>
+<input type="button" value="Say hello" onClick="showAndroidToast('Hello Android!')"/>
+
 </body>
 </html>

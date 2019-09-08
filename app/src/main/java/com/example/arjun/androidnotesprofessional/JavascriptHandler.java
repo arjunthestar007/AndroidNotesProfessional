@@ -28,4 +28,9 @@ public class JavascriptHandler {
         Toast.makeText(mContext, dummyData, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "jsCallbackTwo: ");
     }
+
+    @JavascriptInterface
+    public void showToast(String toast) {
+        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+    }
 }
