@@ -11,7 +11,13 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.Myholder> {
     List<Movie> mMoviesList;
+    ClickInterface clickInterface;
 
+    public interface ClickInterface {
+        void clickEventOne(Object obj);
+
+        void clickEventTwo(Object obj1, Object obj2);
+    }
 
     public MyAdapter(List<Movie> mMoviesList) {
         this.mMoviesList = mMoviesList;
