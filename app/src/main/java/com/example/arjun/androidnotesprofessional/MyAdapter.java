@@ -11,112 +11,117 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    // The items to display in your RecyclerView
-    private List<Object> items;
 
-    private final int MOVIE = 0, IMAGE = 1;
+    List<Movie> movieList;
 
-
-    public MyAdapter(List<Object> mMoviesList) {
-        this.items = mMoviesList;
+    public MyAdapter(List<Movie> movieList) {
+        this.movieList = movieList;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (items.get(position) instanceof Movie) {
-            return MOVIE;
-        } else if (items.get(position) instanceof String) {
-            return IMAGE;
+    private static final int FOOTER_VIEW = 1;
+
+    // Define a view holder for Footer view
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Do whatever you want on clicking the item
+                }
+            });
         }
-        return -1;
+    }
+
+
+    // Now define the viewholder for Normal list item
+    public class NormalViewHolder extends RecyclerView.ViewHolder {
+        TextView title, genere, year;
+
+        public NormalViewHolder(View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.textView1);
+            genere = itemView.findViewById(R.id.textView2);
+            year = itemView.findViewById(R.id.textView3);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Do whatever you want on clicking the normal items
+                }
+            });
+
+
+        }
+
+        public void bindView(int position) {
+
+            Movie movie = movieList.get(position);
+            title.setText(movie.getTitle());
+            year.setText(movie.getYear());
+            genere.setText(movie.getGenre());
+            movie.getGenre();
+// bindView() method to implement actions
+        }
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder { // Define elements of a row here
+        public ViewHolder(View itemView) {
+            super(itemView);
+            // Find view by ID and initialize here
+        }
+
+        public void bindView(int position) {
+            // bindView() method to implement actions
+        }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-
-        switch (viewType) {
-            case MOVIE:
-                View v1 = inflater.inflate(R.layout.movie_list_row, viewGroup, false);
-                viewHolder = new ViewHolder1(v1);
-                break;
-            case IMAGE:
-                View v2 = inflater.inflate(R.layout.viewholder2, viewGroup, false);
-                viewHolder = new ViewHolder2(v2);
-                break;
-//            default:
-//                View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
-//                viewHolder = new MyAdapter(v);
-//                break;
+        View v;
+        if (viewType == FOOTER_VIEW) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_footer, viewGroup,
+                    false);
+            FooterViewHolder vh = new FooterViewHolder(v);
+            return vh;
         }
-        return viewHolder;
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_normal, viewGroup, false);
+        NormalViewHolder vh = new NormalViewHolder(v);
+        return vh;
+
     }
-
-
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        switch (viewHolder.getItemViewType()) {
-            case MOVIE:
-                ViewHolder1 vh1 = (ViewHolder1) viewHolder;
-                configureViewHolder1(vh1, position);
-                break;
-            case IMAGE:
-                ViewHolder2 vh2 = (ViewHolder2) viewHolder;
-                configureViewHolder2(vh2, position);
-                break;
-//            default:
-//                RecyclerViewSimpleTextViewHolder vh = (RecyclerViewSimpleTextViewHolder) viewHolder;
-//                configureDefaultViewHolder(vh, position);
-//                break;
-        }
-    }
-    private void configureViewHolder1(ViewHolder1 vh1, int position) {
-        Movie movie = (Movie) items.get(position);
-        if (movie != null) {
-            vh1.title.setText("title: " + movie.getTitle());
-            vh1.genre.setText("genere: " + movie.getGenre());
-        }
-    }
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-    private void configureViewHolder2(ViewHolder2 vh2,int position) {
-        vh2.getImageView().setImageResource(R.drawable.ic_launcher_background);
+        if (viewHolder instanceof NormalViewHolder) {
+            NormalViewHolder vh = (NormalViewHolder) viewHolder;
+            vh.bindView(i);
+        } else if (viewHolder instanceof FooterViewHolder) {
+            FooterViewHolder vh = (FooterViewHolder) viewHolder;
+
+        }
+
+
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        if (movieList == null) {
+            return 0;
+        }
+        if (movieList.size() == 0) {
+            return 1;
+        }
+        // Add extra view to show the footer view
+        return movieList.size() + 1;
     }
 
-    public class ViewHolder1 extends RecyclerView.ViewHolder {
-
-        public TextView title, year, genre;
-
-        public ViewHolder1(@NonNull View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            genre = (TextView) view.findViewById(R.id.genre);
-            year = (TextView) view.findViewById(R.id.year);
+    @Override
+    public int getItemViewType(int position) {
+        if (position == movieList.size()) {
+            return FOOTER_VIEW;
         }
-    }
-
-    public class ViewHolder2 extends RecyclerView.ViewHolder {
-
-        private ImageView ivExample;
-
-        public ViewHolder2(View v) {
-            super(v);
-            ivExample = (ImageView) v.findViewById(R.id.ivExample);
-        }
-
-        public ImageView getImageView() {
-            return ivExample;
-        }
-
-        public void setImageView(ImageView ivExample) {
-            this.ivExample = ivExample;
-        }
+        return super.getItemViewType(position);
     }
 }
