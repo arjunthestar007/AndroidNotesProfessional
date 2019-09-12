@@ -1,19 +1,65 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 28
+
+    //not recommend.use separate file for keystore info
+    signingConfigs {
+        applicationName {
+            keyAlias 'applicationName'
+            keyPassword 'password'
+            storeFile file('../key/applicationName.jks')
+            storePassword 'keystorePassword'
+        }
+    }
     defaultConfig {
+
         applicationId "com.example.arjun.androidnotesprofessional"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "long", "BUILD_DATE", System.currentTimeMillis() + "L"
+        buildConfigField "boolean", "IS_PRODUCTION", "false"
+        signingConfig signingConfigs.applicationName
+
     }
     buildTypes {
+        prod {
+            initWith debug
+            // override the productive flag for the flavor "prod"
+            buildConfigField "boolean", "IS_PRODUCTION", "true"
+
+            // accessable only in prod flavour
+            resValue 'string', 'app_name1', 'My App Produ'
+            applicationIdSuffix ".prod"
+
+        }
+        dev {
+            initWith debug
+            buildConfigField "boolean", "IS_PRODUCTION", "false"
+            applicationIdSuffix ".dev"
+
+
+        }
         release {
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        free {
+            applicationId "com.example.app.free"
+            versionName "1.0-free"
+        }
+        paid {
+            applicationId "com.example.app.paid"
+            versionName "1.0-paid"
         }
     }
 }
