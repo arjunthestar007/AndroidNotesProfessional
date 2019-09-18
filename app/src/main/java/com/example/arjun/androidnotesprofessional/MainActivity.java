@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a new instance of a JSONObject
         JSONObject object = new JSONObject();
+        // Create a new instance of a JSONArray
+        JSONArray array = new JSONArray();
+        // With put() you can add a value to the array.
+        array.put("Perugalathur");
+        array.put("Siruseri");
+
         try {
             // With put you can add a name/value pair to the JSONObject
             object.put("name", "test");
@@ -26,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
             object.put("value", 3.23);
             object.put("member", true);
             object.put("null_value", JSONObject.NULL);
+            object.put("my_loc_array", array);
             // Calling toString() on the JSONObject returns the JSON in string format.
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
 
 
         final String json = object.toString();
