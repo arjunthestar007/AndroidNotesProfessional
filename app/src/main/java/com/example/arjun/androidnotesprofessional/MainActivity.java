@@ -17,14 +17,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTextView = findViewById(R.id.textview);
-        mParsedTextView=findViewById(R.id.textView2);
+        mParsedTextView = findViewById(R.id.textView2);
         // Create a new instance of a JSONObject
         JSONObject object = new JSONObject();
         // Create a new instance of a JSONArray
         JSONArray array = new JSONArray();
         // With put() you can add a value to the array.
-        array.put("Perugalathur");
-        array.put("Siruseri");
+        JSONObject object1 = new JSONObject();
+        try {
+            object1.put("loc1", "tambaram");
+            object1.put("loc2", "perugalathur");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        array.put(object1);
+
 
         try {
             // With put you can add a name/value pair to the JSONObject
@@ -46,26 +54,21 @@ public class MainActivity extends AppCompatActivity {
         final String json = object.toString();
         mTextView.setText(json);
 
-        // Parse simple JSON object
-        StringBuilder str=new StringBuilder();
+
+        // JSONArray nested inside JSONObject
+
+        JSONObject root = null;
         try {
-            JSONObject jsonObject=new JSONObject(json);
-            String name = jsonObject.getString("name");
-            String content = jsonObject.getString("content");
-            int year = jsonObject.getInt("year");
-            str.append("Name :"+name);
-
-            JSONArray names = jsonObject.getJSONArray("my_loc_array");
-
-            for (int i = 0; i < names.length(); i++) {
-                str.append("Location :"+names.get(i));
-
-            }
-
-            mParsedTextView.setText(str);
+            root = new JSONObject(json);
+            JSONArray booksArray = root.getJSONArray("my_loc_array");
+            JSONObject firstBook = booksArray.getJSONObject(0);
+            String title = firstBook.getString("loc1");
+            mParsedTextView.setText(title);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
     }
 }
