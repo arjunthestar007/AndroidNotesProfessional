@@ -2,6 +2,7 @@ package com.example.arjun.androidnotesprofessional;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -19,30 +20,24 @@ public class MainActivity extends AppCompatActivity {
         mTextView = findViewById(R.id.textview);
         mParsedTextView = findViewById(R.id.textView2);
 
-        String jsonStr = "{name:james}";
-        String name=null, surname;
+        String jsonString = "{\n" +
+                "\"student\":{\"name\":\"Rahul\", \"lastname\":\"sharma\"},\n" +
+                "\"marks\":{\"maths\":\"88\"}\n" +
+                "}";
 
-        JSONObject json = null; // Check if the field "name" is present String name, surname;
+
         try {
-            json = new JSONObject(jsonStr);
-
-            // This will be true, since the field "name" is present on our JSON.
-            if (json.has("name")) {
-                name = json.getString("name");
-            } else {
-                name = "John";
-            }
-// This will be false, since our JSON doesn't have the field "surname".
-            if (json.has("surname")) {
-                surname = json.getString("surname");
-            } else {
-                surname = "Doe";
-            }
+            // Create a new instance of a JSONObject
+            final JSONObject object = new JSONObject(jsonString);
+            JSONObject studentJSON = object.getJSONObject("student");
+            studentJSON.put("name", "Kumar");
+            object.remove("student");
+            object.put("student", studentJSON);
+// Calling toString() on the JSONObject returns the JSON in string format.
+            final String json = object.toString();
+            mParsedTextView.setText(json);
         } catch (JSONException e) {
-            e.printStackTrace();
+
         }
-
-
-        mTextView.setText(name);
     }
 }
