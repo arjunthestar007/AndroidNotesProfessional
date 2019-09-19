@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
             object.put("member", true);
             object.put("null_value", JSONObject.NULL);
             object.put("my_loc_array", array);
-            // Calling toString() on the JSONObject returns the JSON in string format.
 
 
         } catch (JSONException e) {
@@ -43,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
+        // Calling toString() on the JSONObject returns the JSON in string format.
         final String json = object.toString();
         mTextView.setText(json);
 
+        // Parse simple JSON object
         StringBuilder str=new StringBuilder();
         try {
             JSONObject jsonObject=new JSONObject(json);
@@ -60,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < names.length(); i++) {
                 str.append("Location :"+names.get(i));
 
-
-
             }
+
             mParsedTextView.setText(str);
         } catch (JSONException e) {
             e.printStackTrace();
